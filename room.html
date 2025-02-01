@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Casino Room</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="casino-room">
+        <h1>Welcome to the Casino Room!</h1>
+        <p>Choose a game to play:</p>
+
+        <!-- Game Selection -->
+        <div class="game-selection">
+            <!-- Slots -->
+            <div class="game-card" id="slots" onclick="location.href='slots.html';">
+                <div class="slots-icon">
+                    <div class="reel"></div>
+                    <div class="reel"></div>
+                    <div class="reel"></div>
+                </div>
+                <h2>Slots</h2>
+                <p>Spin the reels and win big!</p>
+            </div>
+
+            <!-- Blackjack -->
+            <div class="game-card" id="blackjack" onclick="location.href='blackjack.html';">
+                <div class="blackjack-icon"></div>
+                <h2>Blackjack</h2>
+                <p>Beat the dealer and get 21!</p>
+            </div>
+            <!-- Roulette -->
+            <div class="game-card" id="roulette" onclick="location.href='roulette.html';">
+                <div class="roulette-icon"></div>
+                <h2>Roulette</h2>
+                <p>Bet on your lucky number!</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

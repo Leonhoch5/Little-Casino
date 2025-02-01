@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Realistic Roulette</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #1e1e1e;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            margin: 20px 0;
+            font-size: 2.5em;
+            color: gold;
+        }
+
+        .wheel-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 20px auto;
+        }
+
+        .wheel {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 10px solid #8B4513;
+            position: absolute;
+            background: radial-gradient(circle, #228B22 40%, transparent 41%), conic-gradient(red 0deg 9.73deg, black 9.73deg 19.46deg,
+                    red 19.46deg 29.19deg, black 29.19deg 38.92deg,
+                    red 38.92deg 48.65deg, black 48.65deg 58.38deg,
+                    red 58.38deg 68.11deg, black 68.11deg 77.84deg,
+                    red 77.84deg 87.57deg, black 87.57deg 97.3deg,
+                    red 97.3deg 107.03deg, black 107.03deg 116.76deg,
+                    red 116.76deg 126.49deg, black 126.49deg 136.22deg,
+                    red 136.22deg 145.95deg, black 145.95deg 155.68deg,
+                    red 155.68deg 165.41deg, black 165.41deg 175.14deg,
+                    red 175.14deg 184.87deg, black 184.87deg 194.6deg,
+                    red 194.6deg 204.33deg, black 204.33deg 214.06deg,
+                    red 214.06deg 223.79deg, black 223.79deg 233.52deg,
+                    red 233.52deg 243.25deg, black 243.25deg 252.98deg,
+                    red 252.98deg 262.71deg, black 262.71deg 272.44deg,
+                    red 272.44deg 282.17deg, black 282.17deg 291.9deg,
+                    red 291.9deg 301.63deg, black 301.63deg 311.36deg,
+                    red 311.36deg 321.09deg, black 321.09deg 330.82deg,
+                    red 330.82deg 340.55deg, black 340.55deg 350.28deg,
+                    green 350.28deg 360deg);
+            transform-origin: center;
+            transition: transform 4s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+        }
+
+        .marker {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            width: 6px;
+            height: 30px;
+            background: gold;
+            transform: translateX(-50%);
+            border-radius: 3px;
+            box-shadow: 0 0 10px gold, 0 0 20px gold, 0 0 30px gold;
+            animation: glow 1.5s infinite alternate;
+        }
+
+        @keyframes glow {
+            0% {
+                box-shadow: 0 0 10px gold, 0 0 20px gold, 0 0 30px gold;
+            }
+
+            100% {
+                box-shadow: 0 0 20px gold, 0 0 30px gold, 0 0 40px gold;
+            }
+        }
+
+        .number {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 2px black;
+            transform-origin: center;
+            text-align: center;
+            line-height: 20px;
+        }
+
+        .balance {
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+
+        .bet-input {
+            margin-top: 10px;
+        }
+
+        .bet-input input {
+            padding: 5px;
+            font-size: 1em;
+            margin: 5px;
+        }
+
+        .bet-input button {
+            padding: 5px 10px;
+            font-size: 1em;
+            background-color: #8B4513;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        .bet-input button:hover {
+            background-color: #A0522D;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 1.2em;
+            animation: fadeIn 1s;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .history {
+            margin-top: 20px;
+            font-size: 1em;
+            color: #ccc;
+        }
+
+        .history ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .history li {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Realistic Roulette</h1>
+    <div class="wheel-container">
+        <div class="marker"></div>
+        <div class="wheel" id="wheel">
+            <!-- Numbers on the wheel -->
+            <div class="number"
+                style="transform: translate(-50%, -50%) rotate(4.86deg) translateY(-120px) rotate(-4.86deg);">0</div>
+            <div class="number"
+                style="transform: translate(-50%, -50%) rotate(14.59deg) translateY(-120px) rotate(-14.59deg);">32</div>
+            <div class="number"
+                style="transform: translate(-50%, -50%) rotate(24.32deg) translateY(-120px) rotate(-24.32deg);">15</div>
+            <div class="number"
+                style="transform: translate(-50%, -50%) rotate(34.05deg) translateY(-120px) rotate(-34.05deg);">19</div>
+            <div class="number"
+                style="transform: translate(-50%, -50%) rotate(43.78deg) translateY(-120px) rotate(-43.78deg);">4</div>
+            <div class="number"
+                style="transform: translate(-50%, -50%) rotate(53.51deg) translateY(-120px) rotate(-53.51deg);">21</div>
+            <div class="number"
+                style="transform: translate(-50%, -50%) rotate(63.24deg) translateY(-120px) rotate(-63.24deg);">2</div>
+            <div class="number"
+                style="transform: translate(-50%, -50%) rotate(72.97deg) translateY(-120px) rotate(-72.97deg);">25</div>
+            <div class="number"
+                style="transform: translate(-50%, -50%) rotate(82.7deg) translateY(-120px) rotate(-82.7deg);">17</div>
+            <div class="number"
+                style="transform: translate(-50%, -50%) rotate(92.43deg) translateY(-120px) rotate(-92.43deg);">34</div>
+            <div class="number"
+                style="transform: translate(-50%, -50%) rotate(102.16deg) translateY(-120px) rotate(-102.16deg);">6
+            </div>
+            <div class="number"
+                style="transform: translate(-50%, -50%) rotate(111.89deg) translateY(-120px) rotate(-111.89deg);">27
+            </div>
+            <div class="number"
+                style="transform: translate(-50%, -50%) rotate(121.62deg) translateY(-120px) rotate(-121.62deg);">13
+            </div>
+            <div class="number"
+                style="transform: translate(-50%, -50%) rotate(131.35deg) translateY(-120px) rotate(-131.35deg);">36
+            </div>
+            <div class="number"
+                style="transform: translate(-50%, -50%) rotate(141.08deg) translateY(-120px) rotate(-141.08deg);">11
+            </div>
+            <div class="number"
+                style="transform: translate(-50%, -50%) rotate(150.81deg) translateY(-120px) rotate(-150.81deg);">30
+            </div>
+            <div class="number"
+                style="transform: translate(-50%, -50%) rotate(160.54deg) translateY(-120px) rotate(-160.54deg);">8
+            </div>
+            <div class="number"
+                style="transform: translate(-50%, -50%) rotate(170.27deg) translateY(-120px) rotate(-170.27deg);">23
+            </div>
+            <div class="number"
+                style="transform: translate(-50%, -50%) rotate(180deg) translateY(-120px) rotate(-180deg);">10</div>
+            <div class="number"
+                style="transform: translate(-50%, -50%) rotate(189.73deg) translateY(-120px) rotate(-189.73deg);">5
+            </div>
+            <div class="number"
+                style="transform: translate(-50%, -50%) rotate(199.46deg) translateY(-120px) rotate(-199.46deg);">24
+            </div>
+            <div class="number"
+                style="transform: translate(-50%, -50%) rotate(209.19deg) translateY(-120px) rotate(-209.19deg);">16
+            </div>
+            <div class="number"
+                style="transform: translate(-50%, -50%) rotate(218.92deg) translateY(-120px) rotate(-218.92deg);">33
+            </div>
+            <div class="number"
+                style="transform: translate(-50%, -50%) rotate(228.65deg) translateY(-120px) rotate(-228.65deg);">1
+            </div>
+            <div class="number"
+                style="transform: translate(-50%, -50%) rotate(238.38deg) translateY(-120px) rotate(-238.38deg);">20
+            </div>
+            <div class="number"
+                style="transform: translate(-50%, -50%) rotate(248.11deg) translateY(-120px) rotate(-248.11deg);">14
+            </div>
+            <div class="number"
+                style="transform: translate(-50%, -50%) rotate(257.84deg) translateY(-120px) rotate(-257.84deg);">31
+            </div>
+            <div class="number"
+                style="transform: translate(-50%, -50%) rotate(267.57deg) translateY(-120px) rotate(-267.57deg);">9
+            </div>
+            <div class="number"
+                style="transform: translate(-50%, -50%) rotate(277.3deg) translateY(-120px) rotate(-277.3deg);">22</div>
+            <div class="number"
+                style="transform: translate(-50%, -50%) rotate(287.03deg) translateY(-120px) rotate(-287.03deg);">18
+            </div>
+            <div class="number"
+                style="transform: translate(-50%, -50%) rotate(296.76deg) translateY(-120px) rotate(-296.76deg);">29
+            </div>
+            <div class="number"
+                style="transform: translate(-50%, -50%) rotate(306.49deg) translateY(-120px) rotate(-306.49deg);">7
+            </div>
+            <div class="number"
+                style="transform: translate(-50%, -50%) rotate(316.22deg) translateY(-120px) rotate(-316.22deg);">28
+            </div>
+            <div class="number"
+                style="transform: translate(-50%, -50%) rotate(325.95deg) translateY(-120px) rotate(-325.95deg);">12
+            </div>
+            <div class="number"
+                style="transform: translate(-50%, -50%) rotate(335.68deg) translateY(-120px) rotate(-335.68deg);">35
+            </div>
+            <div class="number"
+                style="transform: translate(-50%, -50%) rotate(345.41deg) translateY(-120px) rotate(-345.41deg);">3
+            </div>
+            <div class="number"
+                style="transform: translate(-50%, -50%) rotate(355.14deg) translateY(-120px) rotate(-355.14deg);">26
+            </div>
+        </div>
+    </div>
+    <div class="balance">
+        Balance: $<span id="balance">1000</span>
+        <button onclick="resetBalance()" style="margin-left: 10px;">Reset Balance</button>
+    </div>
+    <div class="bet-input">
+        <label for="bet">Place your bet (number 0-36, "red", "black", "odd", "even"):</label>
+        <input type="text" id="bet">
+        <label for="amount">Amount:</label>
+        <input type="number" id="amount" min="1" max="1000">
+        <button onclick="spinRoulette()">Spin</button>
+    </div>
+    <p id="result" class="result"></p>
+    <div class="history">
+        <h2>Spin History</h2>
+        <ul id="history-list"></ul>
+    </div>
+
+    <script>
+        let balance = 1000;
+        const history = [];
+
+        function spinRoulette() {
+            const wheel = document.getElementById("wheel");
+            const bet = document.getElementById("bet").value.toLowerCase();
+            const amount = parseInt(document.getElementById("amount").value);
+            const spinDegree = Math.floor(Math.random() * 3600) + 1440; // Multiple full rotations
+
+            // Validate input
+            if (isNaN(amount) || amount < 1 || amount > balance) {
+                document.getElementById("result").textContent = "Invalid bet amount!";
+                return;
+            }
+
+            // Play spinning sound
+            const spinSound = new Audio('spin.mp3');
+            spinSound.play();
+
+            wheel.style.transform = `rotate(${spinDegree}deg)`;
+
+            setTimeout(() => {
+                const finalDegree = spinDegree % 360;
+                const number = Math.floor(finalDegree / 9.73) % 37;
+                const colors = ["red", "black"];
+                const color = number === 0 ? "green" : colors[number % 2];
+
+                let resultText = `The wheel landed on ${number} (${color}). `;
+                let win = false;
+
+                if (bet == number || bet == color || (bet == "odd" && number % 2 === 1) || (bet == "even" && number % 2 === 0 && number !== 0)) {
+                    resultText += "You win!";
+                    win = true;
+                } else {
+                    resultText += "You lose.";
+                }
+
+                if (win) {
+                    balance += amount;
+                } else {
+                    balance -= amount;
+                }
+
+                document.getElementById("result").textContent = resultText;
+                document.getElementById("balance").textContent = balance;
+
+                // Update history
+                history.push({ number, color, result: win ? "Win" : "Lose" });
+                updateHistory();
+
+                // Play win/lose sound
+                const resultSound = new Audio(win ? 'win.mp3' : 'lose.mp3');
+                resultSound.play();
+            }, 4000);
+        }
+
+        function resetBalance() {
+            balance = 1000;
+            document.getElementById("balance").textContent = balance;
+        }
+
+        function updateHistory() {
+            const historyList = document.getElementById("history-list");
+            historyList.innerHTML = history
+                .slice(-5) // Show last 5 spins
+                .map((item) => `<li>${item.number} (${item.color}) - ${item.result}</li>`)
+                .join("");
+        }
+    </script>
+</body>
+
+</html>
